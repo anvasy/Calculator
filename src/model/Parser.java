@@ -1,8 +1,5 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Parser {
 
     private double result;
@@ -10,10 +7,10 @@ public class Parser {
 
     public String parse(String expression) {
 
-        if(!validInput(expression))
+        if (!Validator.validInput(expression))
             return "ошибка";
 
-        expression = replaceSymbols(expression);
+        expression = Validator.replaceSymbols(expression);
         sumSubtract(expression);
         return String.valueOf(result);
     }
@@ -23,38 +20,8 @@ public class Parser {
         result = 0;
     }
 
-    private boolean validInput (String expression) {
-
-        if(!expression.matches("(.*\\d)|(.*[!)%])") || expression.matches("(.*\\d+\\.\\d+\\..*)"))
-            return false;
-
-        int bracketPairsCounter = 0;
-
-        for(char sym : expression.toCharArray()) {
-            if(sym == '(')
-                bracketPairsCounter++;
-            if(sym == ')')
-                bracketPairsCounter--;
-        }
-
-        if(bracketPairsCounter == 0)
-            return true;
-        else
-            return false;
-    }
-
-    private String replaceSymbols(String expression) {
-        expression = expression.replace("sqrt", "s");
-        expression = expression.replace("reciproc", "r");
-        expression = expression.replace("ln", "n");
-        expression = expression.replace("lg", "g");
-        expression = expression.replace("fact", "f");
-        expression = expression.replace("percent", "p");
-
-        return expression;
-    }
-
     private void sumSubtract(String expression) {
+        System.out.println("sumSubstract " + expression + "\n");
 
         multiplyDivide(expression);
         double res = result;
@@ -80,6 +47,7 @@ public class Parser {
     }
 
     private void multiplyDivide(String expression) {
+        System.out.println("multiplyDivide " + expression  + "\n");
         doBrackets(expression);
 
         double res = result;
@@ -106,6 +74,7 @@ public class Parser {
     }
 
     private void doBrackets(String expression) {
+        System.out.println("doBrackets " + expression + "\n");
 
         if (expression.startsWith("(")) {
             sumSubtract(expression.substring(1));
@@ -118,11 +87,12 @@ public class Parser {
     }
 
     private void doFunction(String expression) {
+        System.out.println("doFunction " + expression + "\n");
         String f = "";
 
         int i = 0;
         while (i < expression.length() &&
-                (Character.isLetter(expression.charAt(i)) || ( Character.isDigit(expression.charAt(i)) && i > 0 ) )) {
+                (Character.isLetter(expression.charAt(i)) || (Character.isDigit(expression.charAt(i)) && i > 0))) {
             f += expression.charAt(i);
             i++;
         }
@@ -136,16 +106,16 @@ public class Parser {
     }
 
     private void functionsCount(String s) {
-
+        System.out.println("functionsCount " + s + "\n");
         switch (s) {
             case "r":
-                result = 1/result;
+                result = 1 / result;
                 break;
             case "f":
                 result = factorial(result);
                 break;
             case "p":
-                result = 100/result;
+                result = 100 / result;
                 break;
             case "n":
                 result = Math.log(result);
@@ -157,25 +127,23 @@ public class Parser {
                 result = Math.sqrt(result);
                 break;
         }
-
     }
 
-    private void doDigit(String s)
-    {
+    private void doDigit(String s) {
         boolean negative = false;
 
-        if(s.startsWith("-")){
+        if (s.startsWith("-")) {
             negative = true;
             s = s.substring(1);
         }
 
         int i = 0;
-        while (i < s.length() && (Character.isDigit(s.charAt(i)) || s.charAt(i) == '.'))  i++;
-        if(i == 0)
+        while (i < s.length() && (Character.isDigit(s.charAt(i)) || s.charAt(i) == '.')) i++;
+        if (i == 0)
             return;
 
         double num = Double.parseDouble(s.substring(0, i));
-        if(negative)
+        if (negative)
             num = -num;
 
         remainder = s.substring(i);
