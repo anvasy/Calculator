@@ -5,6 +5,7 @@ import view.ExpressionNode;
 
 import javax.swing.tree.TreeNode;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TreeBuilder {
@@ -37,8 +38,17 @@ public class TreeBuilder {
         if (lexemes == null)
             return null;
         ExpressionNode node = new ExpressionNode(StringUtils.join(lexemes, ""));
-        if (lexemes.get(0).equals("(") && lexemes.get(lexemes.size() - 1).equals(")")) {
-            lexemes = lexemes.subList(1, lexemes.size() - 1);
+        if(StringUtils.join(lexemes, "").matches("\\(+(\\d+(\\.\\d+)?)([+\\-/*]\\d+(\\.\\d+)?)?\\)+")) {
+            List<String> copy = new ArrayList<>(lexemes);
+            copy.removeAll(Collections.singleton("("));
+            copy.removeAll(Collections.singleton(")"));
+            lexemes = new ArrayList<>(copy);
+        }
+        if (lexemes.get(0).equals("(") && Collections.frequency(lexemes, "(") > Collections.frequency(lexemes, ")")) {
+            lexemes = lexemes.subList(1, lexemes.size());
+        }
+        if (lexemes.get(lexemes.size() - 1).equals(")") && Collections.frequency(lexemes, ")") > Collections.frequency(lexemes, "(")) {
+            lexemes = lexemes.subList(0, lexemes.size() - 1);
         }
         if (lexemes.size() == 1) {
             node.setOperation(lexemes.get(0));
