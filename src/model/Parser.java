@@ -8,7 +8,7 @@ public class Parser {
     public String parse(String expression) {
 
         if (!Validator.validInput(expression))
-            return "ошибка";
+            return "error";
 
         expression = Validator.replaceSymbols(expression);
         sumSubtract(expression);
@@ -21,8 +21,6 @@ public class Parser {
     }
 
     private void sumSubtract(String expression) {
-        System.out.println("sumSubstract " + expression + "\n");
-
         multiplyDivide(expression);
         double res = result;
 
@@ -47,7 +45,6 @@ public class Parser {
     }
 
     private void multiplyDivide(String expression) {
-        System.out.println("multiplyDivide " + expression  + "\n");
         doBrackets(expression);
 
         double res = result;
@@ -74,7 +71,6 @@ public class Parser {
     }
 
     private void doBrackets(String expression) {
-        System.out.println("doBrackets " + expression + "\n");
 
         if (expression.startsWith("(")) {
             sumSubtract(expression.substring(1));
@@ -87,7 +83,6 @@ public class Parser {
     }
 
     private void doFunction(String expression) {
-        System.out.println("doFunction " + expression + "\n");
         String f = "";
 
         int i = 0;
@@ -106,7 +101,6 @@ public class Parser {
     }
 
     private void functionsCount(String s) {
-        System.out.println("functionsCount " + s + "\n");
         switch (s) {
             case "r":
                 result = 1 / result;

@@ -1,39 +1,50 @@
 package view;
 
-import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import java.awt.*;
+import controller.Controller;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTree;
+import java.awt.Color;
+import java.awt.BorderLayout;
 
 public class TreeFrame extends JFrame {
+    Controller controller;
+    String expression;
 
-    public TreeFrame() {
-        setTitle("Дерево математического выражения");
+    JLabel answer;
+    JTree expressionTree;
+
+    public TreeFrame(Controller controller, String expression) {
+        this.controller = controller;
+        this.expression = expression;
+
+        setTitle(expression);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
-        setSize(new Dimension(350, 200));
+        setSize(350, 200);
         setLocationRelativeTo(null);
-        //setResizable(false);
+        setResizable(false);
         getContentPane().setBackground(new Color(190, 212, 204));
 
         initComponents();
+        action();
     }
 
     private void initComponents() {
-        DefaultMutableTreeNode style = new DefaultMutableTreeNode("Style");
-        DefaultMutableTreeNode color = new DefaultMutableTreeNode("color");
-        DefaultMutableTreeNode font = new DefaultMutableTreeNode("font");
-        style.add(color);
-        style.add(font);
-        DefaultMutableTreeNode red = new DefaultMutableTreeNode("red");
-        DefaultMutableTreeNode blue = new DefaultMutableTreeNode("blue");
-        DefaultMutableTreeNode black = new DefaultMutableTreeNode("black");
-        DefaultMutableTreeNode green = new DefaultMutableTreeNode("green");
-        color.add(red);
-        color.add(blue);
-        color.add(black);
-        color.add(green);
-        JTree jt = new JTree(style);
-        jt.setCellRenderer(new TreeCellStyle());
-        add(jt);
+        expressionTree = new JTree(controller.buildTree(expression));
+
+        expressionTree.setCellRenderer(new TreeCellStyle());
+        add(expressionTree, BorderLayout.CENTER);
+        answer = new JLabel(expression + " = " + controller.execute(expression));
+        add(answer, BorderLayout.PAGE_END);
+    }
+
+    private void action() {
+        expressionTree.addTreeSelectionListener(e -> {
+            ExpressionNode selectedNode =
+                    (ExpressionNode) expressionTree.getLastSelectedPathComponent();
+            answer.setText(selectedNode.getExpression() + " = " + controller.execute(selectedNode.getExpression()));
+        });
     }
 }

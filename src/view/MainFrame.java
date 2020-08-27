@@ -43,7 +43,7 @@ public class MainFrame extends JFrame {
 
         answerText = new JTextField(20);
         answerText.setPreferredSize((new Dimension(500, 40)));
-        answerText.setText("ответ ");
+        answerText.setText("answer");
         answerText.setHorizontalAlignment(JTextField.RIGHT);
         Font font1 = new Font("SansSerif", Font.PLAIN, 15);
         answerText.setFont(font1);
@@ -156,12 +156,15 @@ public class MainFrame extends JFrame {
                 case "CE":
                     button.addActionListener(e -> {
                         dataText.setText("");
-                        answerText.setText("ответ");
+                        answerText.setText("answer");
                     });
                     break;
                 case "tree":
                     button.addActionListener(e -> {
-                        new TreeFrame();
+                        if (!ctr.validate(dataText.getText()))
+                            JOptionPane.showMessageDialog(this, "Invalid expression.");
+                        else
+                            new TreeFrame(ctr, dataText.getText());
                     });
                     break;
                 case "C":

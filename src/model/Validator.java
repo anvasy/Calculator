@@ -2,11 +2,11 @@ package model;
 
 public class Validator {
 
-    public static boolean validInput (String expression) {
-        if(!expression.matches("(.*\\d)|(.*[!)%])") || expression.matches("(.*\\d+\\.\\d+\\..*)"))
+    public static boolean validInput(String expression) {
+        if (!expression.matches("(.*\\d)|(.*[!)%])") || expression.matches("(.*\\d+\\.\\d+\\..*)"))
             return false;
 
-        return (expression.split("\\(",-1).length - 1) == (expression.split("\\)",-1).length - 1);
+        return (expression.split("\\(", -1).length - 1) == (expression.split("\\)", -1).length - 1);
     }
 
     public static String replaceSymbols(String expression) {
