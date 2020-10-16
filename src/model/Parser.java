@@ -83,18 +83,18 @@ public class Parser {
     }
 
     private void doFunction(String expression) {
-        String f = "";
+        StringBuilder f = new StringBuilder();
 
         int i = 0;
         while (i < expression.length() &&
                 (Character.isLetter(expression.charAt(i)) || (Character.isDigit(expression.charAt(i)) && i > 0))) {
-            f += expression.charAt(i);
+            f.append(expression.charAt(i));
             i++;
         }
 
-        if (!f.isEmpty()) {
+        if (f.length() > 0) {
             doBrackets(expression.substring(f.length()));
-            functionsCount(f);
+            functionsCount(f.toString());
         }
 
         doDigit(expression);
